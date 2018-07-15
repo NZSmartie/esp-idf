@@ -41,3 +41,6 @@
 [submodule "components/mbedtls/mbedtls"]
 	path = components/mbedtls/mbedtls
 	url = https://github.com/espressif/mbedtls.git
+[submodule "components/lwip/lwip"]
+	path = components/lwip/lwip
+	url = https://git.savannah.nongnu.org/git/lwip.git

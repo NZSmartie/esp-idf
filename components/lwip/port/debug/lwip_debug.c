@@ -64,7 +64,7 @@ static void dbg_lwip_tcp_pcb_cnt_show(struct tcp_pcb *pcb)
         len += sprintf(p + len, "%-2d=%-5d ", i+1, pcb->rto_cnt[i]);
     }
     ESP_LWIP_LOGI("%s", buf);
- 
+
     free(buf);
 }
 #endif
@@ -89,13 +89,10 @@ static void dbg_lwip_tcp_pcb_one_show(struct tcp_pcb* pcb)
     ESP_LWIP_LOGI("rttest=%d rtseq=%d sa=%d sv=%d", pcb->rttest, pcb->rtseq, pcb->sa, pcb->sv);
     ESP_LWIP_LOGI("rto=%d nrtx=%d", pcb->rto, pcb->nrtx);
     ESP_LWIP_LOGI("dupacks=%d lastack=%d", pcb->dupacks, pcb->lastack);
-#if ESP_PER_SOC_TCP_WND
-    ESP_LWIP_LOGI("per_soc_window=%d per_soc_snd_buf=%d", pcb->per_soc_tcp_wnd, pcb->per_soc_tcp_snd_buf);
-#endif
     ESP_LWIP_LOGI("cwnd=%d ssthreash=%d", pcb->cwnd, pcb->ssthresh);
     ESP_LWIP_LOGI("snd_next=%d snd_wl1=%d snd_wl2=%d", pcb->snd_nxt, pcb->snd_wl1, pcb->snd_wl2);
     ESP_LWIP_LOGI("snd_lbb=%d snd_wnd=%d snd_wnd_max=%d", pcb->snd_lbb, pcb->snd_wnd, pcb->snd_wnd_max);
-    ESP_LWIP_LOGI("acked=%d", pcb->acked);
+    ESP_LWIP_LOGI("acked=%d", pcb->bytes_acked);
     ESP_LWIP_LOGI("snd_buf=%d snd_queuelen=%d", pcb->snd_buf, pcb->snd_queuelen);
     ESP_LWIP_LOGI("unsent_oversize=%d", pcb->unsent_oversize);
     ESP_LWIP_LOGI("keep_idle=%d keep_intvl=%d keep_cnt=%d", pcb->keep_idle, pcb->keep_intvl, pcb->keep_cnt);
@@ -104,7 +101,7 @@ static void dbg_lwip_tcp_pcb_one_show(struct tcp_pcb* pcb)
 
     ESP_LWIP_LOGI("unsent segments:");
     seg = pcb->unsent;
-    DBG_LWIP_SEG_SHOW(seg) 
+    DBG_LWIP_SEG_SHOW(seg)
 
     ESP_LWIP_LOGI("unacked segments:");
     seg = pcb->unacked;
@@ -191,7 +188,6 @@ void dbg_lwip_stats_show(void)
     IP6_FRAG_STATS_DISPLAY();
     MLD6_STATS_DISPLAY();
     ND6_STATS_DISPLAY();
-    ESP_STATS_DROP_DISPLAY();
 }
 
 #if (ESP_STATS_MEM == 1)
@@ -212,4 +208,3 @@ void dbg_lwip_cnt_show(void)
 
 
 #endif
-

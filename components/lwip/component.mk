@@ -2,28 +2,43 @@
 # Component Makefile
 #
 
+LWIPDIR = $(COMPONENT_PATH)/lwip/src
+
+include $(LWIPDIR)/Filelists.mk
+
 COMPONENT_ADD_INCLUDEDIRS := \
-	include/lwip \
-	include/lwip/port \
-	include/lwip/posix \
-	apps/ping
+	lwip/src/include \
+	port/include \
+	lwip/src/include/compat/posix
 
 ifdef CONFIG_PPP_SUPPORT
-LWIP_PPP_DIRS := netif/ppp/polarssl netif/ppp
+LWIP_SOURCE_FILES := $(COREFILES) $(PPPFILES)
 else
-LWIP_PPP_DIRS :=
+LWIP_SOURCE_FILES := $(COREFILES)
 endif
 
+# Extract source directory names from LWIP's Filelist.mk
+LWIP_SRCDIRS := $(shell dirname $(LWIP_SOURCE_FILES) | sort -u)
+
 COMPONENT_SRCDIRS := \
-	api \
-	apps apps/sntp apps/ping \
-	core core/ipv4 core/ipv6 \
-	$(LWIP_PPP_DIRS) netif \
-	port/freertos port/netif port/debug port
+	port \
+	port/apps \
+	port/debug \
+	port/freertos \
+	port/netif
+
+# Find all source files since COMPONENT_OBJS is explicitly set below
+LWIP_SOURCE_FILES += $(foreach dir,$(COMPONENT_SRCDIRS),$(wildcard $(COMPONENT_PATH)/$(dir)/*.[cS]))
+
+# Substitube all source files (*.c, *.S) for object files (*.o)
+COMPONENT_OBJS := $(patsubst %.c,%.o,$(LWIP_SOURCE_FILES:$(COMPONENT_PATH)/%=%))
+COMPONENT_OBJS := $(patsubst %.S,%.o,$(COMPONENT_OBJS))
+
+# Append filed specified by LWIP's Filelist.mk
+COMPONENT_SRCDIRS += $(LWIP_SRCDIRS:$(COMPONENT_PATH)/%=%)
 
 CFLAGS += -Wno-address  # lots of LWIP source files evaluate macros that check address of stack variables
 
-api/tcpip.o apps/dhcpserver.o: CFLAGS += -Wno-unused-variable
-apps/dhcpserver.o core/pbuf.o core/tcp_in.o: CFLAGS += -Wno-unused-but-set-variable
-netif/ppp/pppos.o: CFLAGS += -Wno-type-limits
-
+# api/tcpip.o apps/dhcpserver.o: CFLAGS += -Wno-unused-variable
+# apps/dhcpserver.o core/pbuf.o core/tcp_in.o: CFLAGS += -Wno-unused-but-set-variable
+# netif/ppp/pppos.o: CFLAGS += -Wno-type-limits
