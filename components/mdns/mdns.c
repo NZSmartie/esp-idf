@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <string.h>
+#include "mdns_networking.h"
 #include "mdns.h"
 #include "mdns_private.h"
-#include "mdns_networking.h"
-#include <string.h>
 
 #ifdef MDNS_ENABLE_DEBUG
 void mdns_debug_packet(const uint8_t * data, size_t len);

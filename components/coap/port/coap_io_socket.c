@@ -213,22 +213,6 @@ coap_free_endpoint(coap_endpoint_t *ep) {
 
 #ifdef CUSTOM_COAP_NETWORK_SEND
 
-#if defined(WITH_POSIX) != defined(HAVE_NETINET_IN_H)
-/* define struct in6_pktinfo and struct in_pktinfo if not available
-   FIXME: check with configure
-*/
-struct in6_pktinfo {
-  struct in6_addr ipi6_addr;	/* src/dst IPv6 address */
-  unsigned int ipi6_ifindex;	/* send/recv interface index */
-};
-
-struct in_pktinfo {
-  int ipi_ifindex;
-  struct in_addr ipi_spec_dst;
-  struct in_addr ipi_addr;
-};
-#endif
-
 #if defined(WITH_POSIX) && !defined(SOL_IP)
 /* Solaris expects level IPPROTO_IP for ancillary data. */
 #define SOL_IP IPPROTO_IP
