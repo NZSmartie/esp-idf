@@ -76,7 +76,7 @@
 /* ESP31 and ESP32 are dualcore processors. */
 #ifndef CONFIG_FREERTOS_UNICORE
 #define portNUM_PROCESSORS 2
-#else 
+#else
 #define portNUM_PROCESSORS 1
 #endif
 
@@ -155,7 +155,7 @@ int xt_clock_freq(void) __attribute__((deprecated));
  * memory.
  *
  * THESE PARAMETERS ARE DESCRIBED WITHIN THE 'CONFIGURATION' SECTION OF THE
- * FreeRTOS API DOCUMENTATION AVAILABLE ON THE FreeRTOS.org WEB SITE. 
+ * FreeRTOS API DOCUMENTATION AVAILABLE ON THE FreeRTOS.org WEB SITE.
  *----------------------------------------------------------*/
 
 #define configUSE_PREEMPTION			1
@@ -252,6 +252,7 @@ int xt_clock_freq(void) __attribute__((deprecated));
 #define INCLUDE_vTaskDelay					1
 #define INCLUDE_uxTaskGetStackHighWaterMark	1
 #define INCLUDE_pcTaskGetTaskName			1
+#define INCLUDE_xTaskGetHandle				1
 #define INCLUDE_xTaskGetIdleTaskHandle      1
 #define INCLUDE_pxTaskGetStackStart			1
 
@@ -307,4 +308,3 @@ extern void vPortCleanUpTCB ( void *pxTCB );
 #endif
 
 #endif /* FREERTOS_CONFIG_H */
-

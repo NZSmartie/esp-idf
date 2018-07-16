@@ -188,6 +188,10 @@ extern "C" {
 	#define INCLUDE_xSemaphoreGetMutexHolder INCLUDE_xQueueGetMutexHolder
 #endif
 
+#ifndef INCLUDE_xTaskGetHandle
+	#define INCLUDE_xTaskGetHandle 0
+#endif
+
 #ifndef INCLUDE_pcTaskGetTaskName
 	#define INCLUDE_pcTaskGetTaskName 1
 #endif
@@ -637,7 +641,7 @@ extern "C" {
 #ifndef traceTASK_NOTIFY_GIVE_FROM_ISR
  	#define traceTASK_NOTIFY_GIVE_FROM_ISR()
  #endif
- 
+
 #ifndef traceISR_EXIT_TO_SCHEDULER
 	#define traceISR_EXIT_TO_SCHEDULER()
 #endif
@@ -1046,4 +1050,3 @@ typedef struct xSTATIC_TIMER
 #endif
 
 #endif /* INC_FREERTOS_H */
-
