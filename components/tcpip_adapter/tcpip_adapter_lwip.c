@@ -38,6 +38,8 @@
 #include "esp_event.h"
 #include "esp_log.h"
 
+#include "freertos/FreeRTOS.h"
+
 static struct netif *esp_netif[TCPIP_ADAPTER_IF_MAX];
 NETIF_DECLARE_EXT_CALLBACK(netif_callback);
 static void tcpip_netif_ext_callback(struct netif* p_netif, netif_nsc_reason_t reason, const netif_ext_callback_args_t* args);
@@ -68,7 +70,7 @@ static void tcpip_adapter_ip_lost_timer(void *arg);
 static sys_sem_t api_sync_sem = NULL;
 static bool tcpip_inited = false;
 static sys_sem_t api_lock_sem = NULL;
-extern sys_thread_t g_lwip_task;
+static sys_thread_t g_lwip_task = NULL;
 static const char* TAG = "tcpip_adapter";
 
 static void tcpip_adapter_api_cb(void* api_msg)
@@ -104,6 +106,11 @@ void tcpip_adapter_init(void)
         tcpip_inited = true;
 
         tcpip_init(NULL, NULL);
+
+        g_lwip_task = xTaskGetHandle(TCPIP_THREAD_NAME);
+
+        LWIP_DEBUGF(TCPIP_DEBUG, ("tcpip_task_hdlxxx : %x, prio:%d,stack:%d\n",
+		 (u32_t)g_lwip_task,TCPIP_THREAD_PRIO,TCPIP_THREAD_STACKSIZE));
 
         memset(esp_ip, 0, sizeof(tcpip_adapter_ip_info_t)*TCPIP_ADAPTER_IF_MAX);
         memset(esp_ip_old, 0, sizeof(tcpip_adapter_ip_info_t)*TCPIP_ADAPTER_IF_MAX);
