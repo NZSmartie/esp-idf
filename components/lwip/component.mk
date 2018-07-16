@@ -11,10 +11,10 @@ COMPONENT_ADD_INCLUDEDIRS := \
 	port/include \
 	lwip/src/include/compat/posix
 
+LWIP_SOURCE_FILES := $(COREFILES) $(CORE4FILES) $(CORE6FILES) $(APIFILES) $(LWIPAPPFILES)
+
 ifdef CONFIG_PPP_SUPPORT
-LWIP_SOURCE_FILES := $(COREFILES) $(PPPFILES)
-else
-LWIP_SOURCE_FILES := $(COREFILES)
+LWIP_SOURCE_FILES += $(PPPFILES)
 endif
 
 # Extract source directory names from LWIP's Filelist.mk
@@ -23,6 +23,7 @@ LWIP_SRCDIRS := $(shell dirname $(LWIP_SOURCE_FILES) | sort -u)
 COMPONENT_SRCDIRS := \
 	port \
 	port/apps \
+	port/core \
 	port/debug \
 	port/freertos \
 	port/netif
